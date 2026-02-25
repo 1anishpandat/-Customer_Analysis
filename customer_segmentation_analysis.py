@@ -190,9 +190,68 @@ print(rfm[['CustomerID', 'Recency', 'Frequency', 'Monetary', 'R_Score', 'F_Score
 
 # ══════════════════════════════════════════════════════════════════
 # SECTION 5: CUSTOMER SEGMENTATION
-# ═════════════════════════════════════════════════════════════════
+# ══════════════════════════════════════════════════════════════════
 print("\n" + "━" * 70)
-print("  SECTION 5: CUSTOMER SEGMENTATION")     
+print("  SECTION 5: CUSTOMER SEGMENTATION")
 print("━" * 70)
 
-# Define segments based on RFM scores
+def segment_customer(row):
+    r, f, m = row['R_Score'], row['F_Score'], row['M_Score']
+    
+    if r >= 4 and f >= 4 and m >= 4:
+        return 'Champions'
+    elif r >= 3 and f >= 3 and m >= 3:
+        return 'Loyal Customers'
+    elif r >= 4 and f >= 2 and m >= 2:
+        return 'Potential Loyalists'
+    elif r >= 4 and f <= 2:
+        return 'New Customers'
+    elif r <= 2 and f >= 3 and m >= 3:
+        return 'At Risk'
+    elif r <= 3 and f <= 3 and m <= 3:
+        return 'Need Attention'
+    elif r <= 2 and f <= 2:
+        return 'Hibernating'
+    elif r == 1:
+        return 'Lost'
+    else:
+        return 'Others'
+
+rfm['Segment'] = rfm.apply(segment_customer, axis=1)
+print("✓ Customers segmented!")
+
+# Segment distribution
+print("\n📊 Customer Segment Distribution:")
+segment_counts = rfm['Segment'].value_counts().reset_index()
+segment_counts.columns = ['Segment', 'Customer_Count']
+segment_counts['Percentage'] = (segment_counts['Customer_Count'] / len(rfm) * 100).round(2)
+print(segment_counts.to_string(index=False))
+
+# Detailed segment analysis
+print("\n📊 Detailed Segment Analysis:")
+segment_analysis = rfm.groupby('Segment').agg({
+    'CustomerID': 'count',
+    'Recency': 'mean',
+    'Frequency': 'mean',
+    'Monetary': 'mean',
+    'RFM_Score_Avg': 'mean'
+}).round(2).reset_index()
+
+segment_analysis.columns = ['Segment', 'Customer_Count', 'Avg_Recency',
+                            'Avg_Frequency', 'Avg_Monetary', 'Avg_RFM_Score']
+
+# Calculate total revenue per segment
+segment_revenue = rfm.groupby('Segment')['Monetary'].sum().reset_index()
+segment_revenue.columns = ['Segment', 'Total_Revenue']
+
+segment_analysis = segment_analysis.merge(segment_revenue, on='Segment')
+segment_analysis['Revenue_Share_%'] = (segment_analysis['Total_Revenue'] / rfm['Monetary'].sum() * 100).round(2)
+segment_analysis = segment_analysis.sort_values('Total_Revenue', ascending=False)
+
+print(segment_analysis.to_string(index=False))
+
+
+# ══════════════════════════════════════════════════════════════════
+# SECTION 6: VISUALIZATIONS
+# ══════════════════════════════════════════════════════════════════
+
