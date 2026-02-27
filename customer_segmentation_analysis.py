@@ -486,3 +486,80 @@ recommendations = pd.DataFrame({
 })
 
 print(recommendations.to_string(index=False))
+
+# ══════════════════════════════════════════════════════════════════
+# SECTION 9: EXPORT RESULTS
+# ══════════════════════════════════════════════════════════════════
+print("\n" + "━" * 70)
+print("  SECTION 9: EXPORTING RESULTS TO EXCEL")
+print("━" * 70)
+
+os.makedirs('outputs', exist_ok=True)
+
+findings_df = pd.DataFrame({
+    'Finding': [
+        'Total Customers Analyzed',
+        'Total Revenue Generated',
+        'Most Valuable Segment',
+        'Champions Customers',
+        'At Risk Customers',
+        'Lost Customers',
+        'Top Country',
+        'Avg Customer Lifetime Value'
+    ],
+    'Insight': [
+        f'{total_customers:,} customers across 38 countries',
+        f'£{total_revenue:,.0f} over 1 year period',
+        f'{top_segment} - £{top_segment_rev:,.0f} ({top_segment_pct}% of revenue)',
+        f'{champions_count:,} customers - highest value, retain at all costs!',
+        f'{at_risk_count:,} customers - need immediate attention',
+        f'{lost_count:,} customers - win-back campaigns needed',
+        f'{top_country} dominates with {uk_share}% revenue share',
+        f'£{(total_revenue / total_customers):,.2f} per customer'
+    ]
+})
+
+with pd.ExcelWriter('outputs/Customer_Segmentation_Report.xlsx', engine='openpyxl') as writer:
+    rfm.to_excel(writer, sheet_name='RFM_Analysis', index=False)
+    segment_analysis.to_excel(writer, sheet_name='Segment_Summary', index=False)
+    segment_counts.to_excel(writer, sheet_name='Segment_Distribution', index=False)
+    country_revenue.to_excel(writer, sheet_name='Country_Analysis')
+    monthly_revenue.to_excel(writer, sheet_name='Monthly_Trend', index=False)
+    findings_df.to_excel(writer, sheet_name='Key_Findings', index=False)
+    recommendations.to_excel(writer, sheet_name='Recommendations', index=False)
+
+rfm.to_csv('outputs/rfm_customer_segmentation.csv', index=False)
+
+print("✓ Excel report saved: outputs/Customer_Segmentation_Report.xlsx")
+print("   Sheets: RFM_Analysis, Segment_Summary, Segment_Distribution,")
+print("           Country_Analysis, Monthly_Trend, Key_Findings, Recommendations")
+print("✓ CSV saved: outputs/rfm_customer_segmentation.csv")
+
+print("\n" + "=" * 70)
+print("  ✅ PROJECT 2: ANALYSIS COMPLETE!")
+print("=" * 70)
+print(f"""
+📁 OUTPUT FILES:
+   data/Online_Retail.xlsx                    ← Original dataset
+   outputs/Customer_Segmentation_Report.xlsx  ← Full Excel report (7 sheets)
+   outputs/rfm_customer_segmentation.csv      ← RFM scores per customer
+   charts/chart1_segment_distribution.png     ← Customer segments
+   charts/chart2_revenue_by_segment.png       ← Revenue contribution
+   charts/chart3_rfm_scatter.png              ← RFM relationships
+   charts/chart4_monthly_trend.png            ← Monthly revenue trend
+   charts/chart5_top_countries.png            ← Geographic analysis
+   charts/chart6_segment_heatmap.png          ← Segment comparison
+
+📊 PROJECT STATS:
+   {len(df_clean):,} transactions analyzed
+   {total_customers:,} customers segmented
+   8 customer segments identified
+   6 professional charts created
+   7-sheet Excel report generated
+   
+🎯 BUSINESS IMPACT:
+   • Identified {champions_count:,} Champions customers to protect
+   • {at_risk_count:,} At Risk customers need immediate campaigns
+   • Top segment drives {top_segment_pct}% of revenue
+   • Clear marketing playbook for each of 8 segments
+""")
