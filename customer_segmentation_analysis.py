@@ -401,3 +401,6 @@ plt.tight_layout()
 plt.savefig('charts/chart6_segment_heatmap.png', dpi=150, bbox_inches='tight')
 plt.close()
 print("   ✓ Saved: chart6_segment_heatmap.png")
+# ══════════════════════════════════════════════════════════════════
+# SECTION 7: KEY FINDINGS & INSIGHTS
+# ══════════════════════════════════════════════════════════════════
