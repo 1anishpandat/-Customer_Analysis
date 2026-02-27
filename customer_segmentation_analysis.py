@@ -454,3 +454,35 @@ print(f"""
 ║  • Opportunity: Expand in other 37 countries                    ║
 ║                                                                  ║
 ╚══════════════════════════════════════════════════════════════════╝""")
+# ══════════════════════════════════════════════════════════════════
+# SECTION 8: MARKETING RECOMMENDATIONS
+# ══════════════════════════════════════════════════════════════════
+print("\n" + "━" * 70)
+print("  SECTION 8: MARKETING RECOMMENDATIONS BY SEGMENT")
+print("━" * 70)
+
+recommendations = pd.DataFrame({
+    'Segment': [
+        'Champions',
+        'Loyal Customers',
+        'Potential Loyalists',
+        'New Customers',
+        'At Risk',
+        'Need Attention',
+        'Hibernating',
+        'Lost'
+    ],
+    'Marketing Action': [
+        '🏆 Reward! Early access, VIP treatment, referral incentives',
+        '💎 Upsell higher-value products, loyalty programs',
+        '🌱 Free shipping, membership programs, recommendations',
+        '🎁 Onboarding series, welcome discount for 2nd purchase',
+        '⚠️ Win them back! Limited-time offers, "We miss you" emails',
+        '📢 Re-engagement campaigns, special promotions',
+        '😴 Deep discounts, reactivation campaigns',
+        '🔄 Last attempt - big incentives, survey why they left'
+    ],
+    'Priority': [1, 2, 3, 4, 2, 3, 4, 5]
+})
+
+print(recommendations.to_string(index=False))
