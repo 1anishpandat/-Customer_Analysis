@@ -404,3 +404,53 @@ print("   ✓ Saved: chart6_segment_heatmap.png")
 # ══════════════════════════════════════════════════════════════════
 # SECTION 7: KEY FINDINGS & INSIGHTS
 # ══════════════════════════════════════════════════════════════════
+
+print("\n" + "━" * 70)
+print("  SECTION 7: KEY FINDINGS & INSIGHTS")
+print("━" * 70)
+
+top_segment = segment_analysis.iloc[0]['Segment']
+top_segment_rev = segment_analysis.iloc[0]['Total_Revenue']
+top_segment_pct = segment_analysis.iloc[0]['Revenue_Share_%']
+champions_count = rfm[rfm['Segment'] == 'Champions'].shape[0]
+at_risk_count = rfm[rfm['Segment'] == 'At Risk'].shape[0]
+lost_count = rfm[rfm['Segment'] == 'Lost'].shape[0]
+top_country = country_revenue.index[0]
+uk_share = country_revenue.iloc[0]['revenue_share_%']
+
+print(f"""
+╔══════════════════════════════════════════════════════════════════╗
+║                   KEY BUSINESS FINDINGS                         ║
+╠══════════════════════════════════════════════════════════════════╣
+║                                                                  ║
+║  FINDING 1: CUSTOMER BASE                                       ║
+║  • {total_customers:,} customers analyzed across 38 countries            ║
+║  • Total revenue: £{total_revenue:,.0f}                           ║
+║  • Avg customer lifetime value: £{(total_revenue/total_customers):,.2f}           ║
+║                                                                  ║
+║  FINDING 2: MOST VALUABLE SEGMENT                               ║
+║  • {top_segment} drives {top_segment_pct}% of total revenue           ║
+║  • Revenue: £{top_segment_rev:,.0f}                                   ║
+║  • This is your GOLD - protect at all costs!                    ║
+║                                                                  ║
+║  FINDING 3: CHAMPIONS (HIGH-VALUE CUSTOMERS)                    ║
+║  • {champions_count:,} customers in Champions segment                    ║
+║  • These are your best customers - reward them!                 ║
+║  • Early access, VIP treatment, referral incentives             ║
+║                                                                  ║
+║  FINDING 4: AT RISK CUSTOMERS (URGENT!)                         ║
+║  • {at_risk_count:,} customers at risk of churning                       ║
+║  • Used to be good customers, haven't purchased recently        ║
+║  • Immediate win-back campaigns needed                          ║
+║                                                                  ║
+║  FINDING 5: LOST CUSTOMERS                                      ║
+║  • {lost_count:,} customers already lost                                 ║
+║  • Deep reactivation campaigns with strong incentives           ║
+║  • Survey them to understand why they left                      ║
+║                                                                  ║
+║  FINDING 6: GEOGRAPHIC CONCENTRATION                            ║
+║  • {top_country} dominates with {uk_share}% revenue share                ║
+║  • High concentration = risk if UK market declines              ║
+║  • Opportunity: Expand in other 37 countries                    ║
+║                                                                  ║
+╚══════════════════════════════════════════════════════════════════╝""")
